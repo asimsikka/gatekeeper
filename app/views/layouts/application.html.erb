@@ -20,15 +20,11 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <script src="https://unpkg.com/flowbite@2.3.0/dist/flowbite.min.js"></script>
   </head>
 
   <body>
+    <%= render "shared/navbar" %>
     <%= yield %>
-    <% if user_signed_in? %>
-      Logged in as <%= current_user.email %> |
-      <%= button_to "Sign out", destroy_user_session_path, method: :delete, form: { style: "display:inline" } %>
-    <% else %>
-      <%= link_to "Sign in", new_user_session_path %>
-    <% end %>
   </body>
 </html>
