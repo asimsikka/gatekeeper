@@ -65,6 +65,20 @@ class OrganizationsController < ApplicationController
     end
   end
 
+  def analytics
+    @organization = Organization.find(params[:id])
+    authorize @organization, :analytics?
+
+    @memberships = @organization.memberships.includes(:user)
+
+    @total_members = @memberships.count
+    @admin_count = @memberships.admin.count
+    @member_count = @memberships.member.count
+    @recent_members = @memberships.order(created_at: :desc).limit(5)
+    # @minors = @memberships.select { |m| m.user.minor? }.count
+    # @adults = @total_members - @minors
+  end
+
   private
 
   def set_organization

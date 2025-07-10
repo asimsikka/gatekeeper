@@ -29,6 +29,10 @@ class OrganizationPolicy < ApplicationPolicy
     true
   end
 
+  def analytics?
+    admin_in_org?
+  end
+
   private
 
   def user_in_org?

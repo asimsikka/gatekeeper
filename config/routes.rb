@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   # Organization management
   resources :organizations do
-    # Future: nested memberships or dashboards can go here
+    member do
+      get :analytics
+    end
   end
 
   # Health check
