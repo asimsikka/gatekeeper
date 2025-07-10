@@ -17,7 +17,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_09_185637) do
   create_table "memberships", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "organization_id", null: false
-    t.integer "role"
+    t.integer "role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_memberships_on_organization_id"
@@ -25,9 +25,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_09_185637) do
   end
 
   create_table "organizations", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.text "description"
+    t.string "location"
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_organizations_on_name"
   end
 
   create_table "users", force: :cascade do |t|

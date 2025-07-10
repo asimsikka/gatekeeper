@@ -1,30 +1,38 @@
 class OrganizationsController < ApplicationController
-  before_action :set_organization, only: %i[ show edit update destroy ]
+  include Pundit
+  # before_action :set_organization, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
+  before_action :set_organization, only: %i[show edit update destroy]
+  before_action :authorize_organization, only: %i[show edit update destroy]
 
   # GET /organizations or /organizations.json
   def index
-    @organizations = Organization.all
+    # @organizations = current_user.organizations
+    @organizations = policy_scope(Organization)
   end
 
   # GET /organizations/1 or /organizations/1.json
-  def show
-  end
+  def show; end
 
   # GET /organizations/new
   def new
     @organization = Organization.new
+    authorize @organization
   end
 
   # GET /organizations/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /organizations or /organizations.json
   def create
     @organization = Organization.new(organization_params)
+    authorize @organization
 
     respond_to do |format|
       if @organization.save
+        # Auto-add creator as admin
+        current_user.memberships.create!(organization: @organization, role: :admin)
+
         format.html { redirect_to @organization, notice: "Organization was successfully created." }
         format.json { render :show, status: :created, location: @organization }
       else
@@ -58,13 +66,16 @@ class OrganizationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_organization
-      @organization = Organization.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def organization_params
-      params.expect(organization: [ :name ])
-    end
+  def set_organization
+    @organization = Organization.find(params[:id])
+  end
+
+  def organization_params
+    params.require(:organization).permit(:name)
+  end
+
+  def authorize_organization
+    authorize @organization
+  end
 end
