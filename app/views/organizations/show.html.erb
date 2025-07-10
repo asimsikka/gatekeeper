@@ -2,16 +2,14 @@
 
 <%= render @organization %>
 
-<div>
+<div class="flex space-x-2 ml-1">
   <% if admin_for?(@organization) %>
-    <%= link_to "Edit", edit_organization_path(@organization), class: "btn btn-sm bg-blue-400 text-white px-4 py-2 rounded" %>
-    <%= button_to "Destroy this organization", @organization, method: :delete, class: "btn btn-sm bg-red-400 text-white px-4 py-2 rounded" %>
-  <% end %>
-  <% if member_for?(@organization) || admin_for?(@organization) %>
-    <%= link_to "Back to organizations", organizations_path, class: "btn btn-sm bg-blue-400 text-white px-4 py-2 rounded" %>
+    <%= link_to "Edit", edit_organization_path(@organization), class: "btn-primary" %>
+    <%= link_to "View Analytics", analytics_organization_path(@organization), class: "btn-primary" %>
+    <%= button_to "Destroy this organization", @organization, method: :delete, class: "btn-danger" %>
   <% end %>
 
+  <% if member_for?(@organization) || admin_for?(@organization) %>
+    <%= link_to "Back to organizations", organizations_path, class: "btn-primary" %>
+  <% end %>
 </div>
-<% if current_user.memberships.find_by(organization: @organization)&.admin? %>
-  <%= link_to "View Analytics", analytics_organization_path(@organization), class: "btn btn-sm bg-blue-400 text-white px-4 py-2 rounded" %>
-<% end %>
