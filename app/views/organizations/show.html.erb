@@ -10,6 +10,7 @@
   <% end %>
 
   <% if member_for?(@organization) || admin_for?(@organization) %>
+    <%= link_to "My Space", space_organization_path(@organization), class: "btn-primary mt-2" %>
     <%= link_to "Back to organizations", organizations_path, class: "btn-primary" %>
   <% end %>
 </div>

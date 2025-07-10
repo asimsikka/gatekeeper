@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  MINIMUM_AGE = 18
+  MINIMUM_AGE = 13
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -11,7 +11,8 @@ class User < ApplicationRecord
   validates :date_of_birth, presence: true
   validate :age_must_be_valid
 
-  validates :parental_consent, acceptance: true, if: -> { underage? }
+  # TODO: evaluate whether this is needed or not :|
+  # validates :parental_consent, acceptance: true, if: -> { underage? }
 
   def age
     return 0 unless date_of_birth
@@ -21,6 +22,19 @@ class User < ApplicationRecord
 
   def underage?
     age.present? && age < MINIMUM_AGE
+  end
+
+  def age_group
+    return :unknown unless date_of_birth
+
+    case age
+    when 0..12
+      :minor
+    when 13..17
+      :teen
+    else
+      :adult
+    end
   end
 
   private

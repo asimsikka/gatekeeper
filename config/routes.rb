@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :organizations do
     member do
       get :analytics
+      get 'space', to: 'space#show', as: :space
     end
   end
 
