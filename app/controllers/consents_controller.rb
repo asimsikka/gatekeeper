@@ -6,7 +6,7 @@ class ConsentsController < ApplicationController
       email = params[:approver_email]
 
       current_user.generate_consent_token!
-      ConsentMailer.approval_email(current_user, email).deliver_now
+      ConsentMailer.approval_email(current_user, email).deliver_later
 
       redirect_to root_path, notice: "Consent request sent to #{email}"
     else
