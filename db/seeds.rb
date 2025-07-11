@@ -1,67 +1,215 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# require 'securerandom'
 
-# org = Organization.find_or_create_by!(name: "Test Org")
-# admin = User.find_or_create_by!(email: "admin@example.com") { _1.password = "password" }
-# user  = User.find_or_create_by!(email: "user@example.com")  { _1.password = "password" }
+# puts "🌱 Clearing existing data..."
+# [ParentalConsent, Content, ContentSpace, Membership, Organization, User].each(&:destroy_all)
 
-# org.memberships.find_or_create_by!(user: admin) { _1.role = :admin }
-# org.memberships.find_or_create_by!(user: user)  { _1.role = :member }
+# puts "👤 Creating users..."
+# alice = User.find_or_create_by!(email: "alice@example.com") do |u|
+#   u.first_name            = "Alice"
+#   u.last_name             = "Admin"
+#   u.date_of_birth         = Date.parse("1980-01-01")
+#   u.password              = "password"
+#   u.password_confirmation = "password"
+# end
 
+# bob = User.find_or_create_by!(email: "bob@example.com") do |u|
+#   u.first_name            = "Bob"
+#   u.last_name             = "Member"
+#   u.date_of_birth         = Date.parse("1990-06-15")
+#   u.password              = "password"
+#   u.password_confirmation = "password"
+# end
 
-puts "🌱 Seeding database with organizations, users, and memberships..."
+# charlie = User.find_or_create_by!(email: "charlie@example.com") do |u|
+#   u.first_name            = "Charlie"
+#   u.last_name             = "Teen"
+#   u.date_of_birth         = 15.years.ago.to_date
+#   u.password              = "password"
+#   u.password_confirmation = "password"
+# end
 
-# Reset data
-Membership.delete_all
-User.delete_all
-Organization.delete_all
+# dana = User.find_or_create_by!(email: "dana@example.com") do |u|
+#   u.first_name            = "Dana"
+#   u.last_name             = "Child"
+#   u.date_of_birth         = 10.years.ago.to_date
+#   u.password              = "password"
+#   u.password_confirmation = "password"
+# end
 
-# Helper method
-def create_user(email:, password:, dob:, parental_consent:, role:, org:)
-  user = User.find_or_create_by!(email: email) do |u|
-    u.password = password
-    u.date_of_birth = dob
-    u.parental_consent = parental_consent
-  end
+# puts "✉️  Creating parental consent records..."
+# ParentalConsent.find_or_create_by!(user: dana, guardian_email: "parent_pending@example.com")
+# ParentalConsent.find_or_create_by!(user: dana, guardian_email: "parent_approved@example.com") do |c|
+#   c.approve!
+# end
 
-  org.memberships.find_or_create_by!(user: user) { _1.role = role }
-  user
+# puts "🏢 Creating organizations..."
+# org1 = Organization.find_or_create_by!(name: "Org One") do |o|
+#   o.email_domain = "orgone.com"
+# end
+
+# org2 = Organization.find_or_create_by!(name: "Org Two") do |o|
+#   o.email_domain = "orgtwo.com"
+# end
+
+# puts "🔗 Creating active memberships..."
+# Membership.find_or_create_by!(organization: org1, user: alice) do |m|
+#   m.role   = "admin"
+#   m.status = "active"
+# end
+
+# Membership.find_or_create_by!(organization: org1, user: bob) do |m|
+#   m.role   = "member"
+#   m.status = "active"
+# end
+
+# Membership.find_or_create_by!(organization: org1, user: charlie) do |m|
+#   m.role   = "member"
+#   m.status = "active"
+# end
+
+# Membership.find_or_create_by!(organization: org2, user: bob) do |m|
+#   m.role   = "admin"
+#   m.status = "active"
+# end
+
+# Membership.find_or_create_by!(organization: org2, user: charlie) do |m|
+#   m.role   = "manager"
+#   m.status = "active"
+# end
+
+# puts "🔔 Creating a pending invite (Org1 → Dana)..."
+# Membership.find_or_create_by!(organization: org1, invite_email: dana.email) do |m|
+#   m.role              = "member"
+#   m.status            = "invited"
+#   m.invitation_token  = SecureRandom.urlsafe_base64(24)
+#   m.invitation_sent_at = Time.current
+# end
+
+# puts "📚 Creating content spaces..."
+# teen_zone  = ContentSpace.find_or_create_by!(organization: org1, name: "Teen Zone")  { |s| s.min_age = 13; s.max_age = 17 }
+# adult_zone = ContentSpace.find_or_create_by!(organization: org1, name: "Adult Zone") { |s| s.min_age = 18; s.max_age = 99 }
+# all_ages   = ContentSpace.find_or_create_by!(organization: org2, name: "All Ages")    { |s| s.min_age = 0;  s.max_age = 99 }
+
+# puts "✍️  Creating contents..."
+# Content.find_or_create_by!(content_space: teen_zone, user: charlie, title: "Teen Tips") do |c|
+#   c.body       = "Some tips appropriate for ages 13–17."
+#   c.age_rating = 15
+# end
+
+# Content.find_or_create_by!(content_space: adult_zone, user: alice, title: "Adult Advice") do |c|
+#   c.body       = "Advice best suited for 18+ audiences."
+#   c.age_rating = 21
+# end
+
+# Content.find_or_create_by!(content_space: all_ages, user: bob, title: "Fun for All") do |c|
+#   c.body       = "Kid-friendly content everyone can enjoy."
+#   c.age_rating = 0
+# end
+
+# puts "✅ Seeding complete!"
+
+require 'securerandom'
+
+puts "🌱 Clearing existing data..."
+[ParentalConsent, Membership, ContentSpace, Organization, User].each(&:destroy_all)
+
+puts "👤 Creating users..."
+alice = User.find_or_create_by!(email: "alice@example.com") do |u|
+  u.first_name            = "Alice"
+  u.last_name             = "Admin"
+  u.date_of_birth         = Date.parse("1980-01-01")
+  u.password              = "password"
+  u.password_confirmation = "password"
 end
 
-# Create Organizations
-org1 = Organization.create!(name: "Alpha Org", description: "First test org", location: "NYC")
-org2 = Organization.create!(name: "Beta Org", description: "Second test org", location: "SF")
-
-# Adult Users (18+)
-create_user(email: "admin1@alpha.com", password: "password", dob: 30.years.ago, parental_consent: true, role: :admin, org: org1)
-create_user(email: "member1@alpha.com", password: "password", dob: 22.years.ago, parental_consent: true, role: :member, org: org1)
-
-create_user(email: "admin2@beta.com", password: "password", dob: 35.years.ago, parental_consent: true, role: :admin, org: org2)
-create_user(email: "member1@beta.com", password: "password", dob: 20.years.ago, parental_consent: true, role: :member, org: org2)
-
-# Teen Users (13–17)
-create_user(email: "teen1@alpha.com", password: "password", dob: 15.years.ago, parental_consent: true, role: :member, org: org1)
-create_user(email: "teen2@beta.com", password: "password", dob: 14.years.ago, parental_consent: true, role: :member, org: org2)
-
-# Minor Users (<13)
-create_user(email: "minor1@alpha.com", password: "password", dob: 10.years.ago, parental_consent: false, role: :member, org: org1)
-create_user(email: "minor2@beta.com", password: "password", dob: 11.years.ago, parental_consent: true, role: :member, org: org2)
-
-# Cross-org test
-shared_user = User.find_or_create_by!(email: "shared@both.com") do |u|
-  u.password = "password"
-  u.date_of_birth = 28.years.ago
-  u.parental_consent = true
+bob = User.find_or_create_by!(email: "bob@example.com") do |u|
+  u.first_name            = "Bob"
+  u.last_name             = "Member"
+  u.date_of_birth         = Date.parse("1990-06-15")
+  u.password              = "password"
+  u.password_confirmation = "password"
 end
 
-org1.memberships.find_or_create_by!(user: shared_user) { _1.role = :member }
-org2.memberships.find_or_create_by!(user: shared_user) { _1.role = :member }
+charlie = User.find_or_create_by!(email: "charlie@example.com") do |u|
+  u.first_name            = "Charlie"
+  u.last_name             = "Teen"
+  u.date_of_birth         = 15.years.ago.to_date
+  u.password              = "password"
+  u.password_confirmation = "password"
+end
 
-puts "✅ Seeding complete."
+dana = User.find_or_create_by!(email: "dana@example.com") do |u|
+  u.first_name            = "Dana"
+  u.last_name             = "Child"
+  u.date_of_birth         = 10.years.ago.to_date
+  u.password              = "password"
+  u.password_confirmation = "password"
+end
+
+puts "✉️  Seeding parental consent for Dana (minor)..."
+# Pending consent
+ParentalConsent.find_or_create_by!(user: dana, guardian_email: "parent_pending@example.com") do |c|
+  # leave approved: false, sent_at auto-set
+end
+# Already approved consent
+ParentalConsent.find_or_create_by!(
+  user:           dana,
+  guardian_email: "parent_approved@example.com"
+) do |c|
+  c.approve!   # flips both c.approved and dana.parental_consent
+end
+
+puts "🏢 Creating organizations..."
+org1 = Organization.find_or_create_by!(name: "Org One") do |o|
+  o.email_domain = "orgone.com"
+end
+
+org2 = Organization.find_or_create_by!(name: "Org Two") do |o|
+  o.email_domain = "orgtwo.com"
+end
+
+puts "🔗 Creating active memberships..."
+# Org1: Alice=admin, Bob&Charlie=member
+Membership.find_or_create_by!(organization: org1, user: alice) do |m|
+  m.role   = "admin"
+  m.status = "active"
+end
+Membership.find_or_create_by!(organization: org1, user: bob) do |m|
+  m.role   = "member"
+  m.status = "active"
+end
+Membership.find_or_create_by!(organization: org1, user: charlie) do |m|
+  m.role   = "member"
+  m.status = "active"
+end
+
+# Org2: Bob=admin, Charlie=manager
+Membership.find_or_create_by!(organization: org2, user: bob) do |m|
+  m.role   = "admin"
+  m.status = "active"
+end
+Membership.find_or_create_by!(organization: org2, user: charlie) do |m|
+  m.role   = "manager"
+  m.status = "active"
+end
+
+puts "🔔 Seeding a pending invite (Org1 → Dana)..."
+Membership.find_or_create_by!(organization: org1, invite_email: dana.email) do |m|
+  m.role               = "member"
+  m.status             = "invited"
+  m.invitation_token   = SecureRandom.urlsafe_base64(24)
+  m.invitation_sent_at = Time.current
+end
+
+puts "📚 Creating content spaces..."
+ContentSpace.find_or_create_by!(organization: org1, name: "Teen Zone")  do |s|
+  s.min_age = 13; s.max_age = 17
+end
+ContentSpace.find_or_create_by!(organization: org1, name: "Adult Zone") do |s|
+  s.min_age = 18; s.max_age = 99
+end
+ContentSpace.find_or_create_by!(organization: org2, name: "All Ages")   do |s|
+  s.min_age = 0;  s.max_age = 99
+end
+
+puts "✅ Seeding complete! 🚀"
