@@ -1,0 +1,39 @@
+<div class="overflow-x-auto">
+  <table class="min-w-full text-sm divide-y divide-gray-200">
+    <thead class="bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      <tr>
+        <th class="px-4 py-3">Email</th>
+        <th class="px-4 py-3">Age Group</th>
+        <% if member %>
+          <th class="px-4 py-3">Consent Required</th>
+          <th class="px-4 py-3">Space Access</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-100 text-gray-700">
+      <% memberships.includes(:user).each do |membership| %>
+        <% user = membership.user %>
+        <tr>
+          <td class="px-4 py-2"><%= user.email %></td>
+          <td class="px-4 py-2 capitalize"><%= user.age_group || "unknown" %></td>
+          <% if member %>
+            <td class="px-4 py-2">
+              <%= user.adult? ? "No" : "Yes" %>
+            </td>
+            <td class="px-4 py-2">
+              <% if user.adult? %>
+                <span class="text-green-600 font-medium">Accessible</span>
+              <% elsif user.consent_approved_at.present? %>
+                <span class="text-green-600 font-medium">Approved</span>
+              <% elsif user.consent_sent_at.present? %>
+                <span class="text-yellow-600 font-medium">Awaiting Approval</span>
+              <% else %>
+                <span class="text-red-500 font-medium">Blocked</span>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

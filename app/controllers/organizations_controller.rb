@@ -2,7 +2,7 @@ class OrganizationsController < ApplicationController
   include Pundit
   # before_action :set_organization, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
-  before_action :set_organization, only: %i[show edit update destroy]
+  before_action :set_organization, only: %i[show edit update destroy analytics]
   before_action :authorize_organization, only: %i[show edit update destroy]
 
   # GET /organizations or /organizations.json
@@ -66,14 +66,16 @@ class OrganizationsController < ApplicationController
   end
 
   def analytics
-    @organization = Organization.find(params[:id])
+    # @organization = Organization.find(params[:id])
     authorize @organization, :analytics?
 
-    @memberships = @organization.memberships.includes(:user)
+    all_members = @organization.memberships
+    @memberships = all_members.members_only.includes(:user)
+    @admins = all_members.admins_only
 
     @total_members = @memberships.count
-    @admin_count = @memberships.admin.count
-    @member_count = @memberships.member.count
+    @admin_count = @admins.count
+    @member_count = @memberships.count
     @recent_members = @memberships.order(created_at: :desc).limit(5)
     # @minors = @memberships.select { |m| m.user.minor? }.count
     # @adults = @total_members - @minors

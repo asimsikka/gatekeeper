@@ -10,6 +10,11 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :consents, only: [:create] do
+    get 'approve', on: :collection
+  end
+
+
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 

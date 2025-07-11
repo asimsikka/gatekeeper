@@ -45,6 +45,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_10_143459) do
     t.date "date_of_birth"
     t.boolean "parental_consent", default: false, null: false
     t.string "consent_token"
+    t.datetime "consent_sent_at"
     t.datetime "consent_approved_at"
     t.index ["consent_token"], name: "index_users_on_consent_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

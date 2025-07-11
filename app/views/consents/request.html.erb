@@ -1,0 +1,23 @@
+<% content_for :title, "Space approval" %>
+
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-12">
+  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+    <h2 class="text-2xl font-bold text-gray-800 text-center mb-4">Parental Approval Required</h2>
+    <p class="text-gray-600 text-sm text-center mb-6">
+      You're under the minimum age. To access your space, please ask a parent or organization admin to approve.
+    </p>
+
+    <%= form_with url: consents_path, method: :post, local: true, class: "space-y-6" do |f| %>
+      <div>
+        <%= f.label :approver_email, "Parent/Admin Email", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.email_field :approver_email, required: true,
+            class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+
+      <div>
+        <%= f.submit "Request Access",
+          class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      </div>
+    <% end %>
+  </div>
+</div>
