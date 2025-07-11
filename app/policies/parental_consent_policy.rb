@@ -1,6 +1,6 @@
 class ParentalConsentPolicy < ApplicationPolicy
   def new?
-    user.present? && !user.adult?
+    user.present? && user.minor? && !user.parental_consent?
   end
 
   def create?

@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def after_sign_in_path_for(resource)
-    if !resource.adult? && !resource.parental_consent?
+    if resource.minor? && !resource.parental_consent?
       new_parental_consent_path(user_id: resource.id)
     else
       super
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
 
   def ensure_parental_consent
     return unless user_signed_in?
-    return unless !current_user.adult? && !current_user.parental_consent?
+    return unless current_user.minor? && !current_user.parental_consent?
 
     if controller_name == 'parental_consents' && %w[new create edit update].include?(action_name)
       return
