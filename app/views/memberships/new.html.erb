@@ -1,0 +1,20 @@
+<%= form_with model: [@organization, @membership], local: true do |f| %>
+  <div class="mb-4">
+    <%= f.label :invite_email, "Invitee Email", class: "block text-gray-700" %>
+    <%= f.email_field :invite_email,
+          placeholder: "user@example.com",
+          class: "mt-1 w-full border rounded p-2" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :role, class: "block text-gray-700" %>
+    <%= f.select :role,
+          Membership.roles.keys,
+          {},
+          class: "mt-1 w-full border rounded p-2" %>
+  </div>
+
+  <div class="mt-6">
+    <%= f.submit "Send Invitation", class: "w-full bg-blue-500 text-white py-2 rounded" %>
+  </div>
+<% end %>

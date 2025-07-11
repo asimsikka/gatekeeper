@@ -39,15 +39,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_070112) do
   end
 
   create_table "memberships", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.bigint "organization_id", null: false
     t.string "role", default: "member", null: false
-    t.string "status", default: "pending", null: false
+    t.string "status", default: "invited", null: false
+    t.string "invite_email"
     t.string "invitation_token"
     t.datetime "invitation_sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["invitation_token"], name: "index_memberships_on_invitation_token", unique: true
+    t.index ["invite_email"], name: "index_memberships_on_invite_email"
     t.index ["organization_id"], name: "index_memberships_on_organization_id"
     t.index ["user_id", "organization_id"], name: "index_memberships_on_user_id_and_organization_id", unique: true
     t.index ["user_id"], name: "index_memberships_on_user_id"
@@ -86,6 +88,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_070112) do
     t.datetime "updated_at", null: false
     t.date "date_of_birth"
     t.string "first_name"
+    t.string "last_name"
     t.boolean "parental_consent", default: false, null: false
     t.string "consent_token"
     t.datetime "consent_sent_at"

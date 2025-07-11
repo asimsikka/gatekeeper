@@ -12,24 +12,18 @@
     </thead>
     <tbody class="bg-white divide-y divide-gray-100 text-gray-700">
       <% memberships.includes(:user).each do |membership| %>
-        <% user = membership.user %>
         <tr>
-          <td class="px-4 py-2"><%= user.email %></td>
-          <td class="px-4 py-2 capitalize"><%= user.age_group || "unknown" %></td>
+          <td class="px-4 py-2"><%= membership.display_email %></td>
+          <td class="px-4 py-2 capitalize"><%= membership.display_age_group %></td>
+
           <% if member %>
             <td class="px-4 py-2">
-              <%= user.adult? ? "No" : "Yes" %>
+              <%= membership.consent_required?.nil? ? "Unknown" : (membership.consent_required? ? "Yes" : "No") %>
             </td>
             <td class="px-4 py-2">
-              <% if user.adult? %>
-                <span class="text-green-600 font-medium">Accessible</span>
-              <% elsif user.consent_approved_at.present? %>
-                <span class="text-green-600 font-medium">Approved</span>
-              <% elsif user.consent_sent_at.present? %>
-                <span class="text-yellow-600 font-medium">Awaiting Approval</span>
-              <% else %>
-                <span class="text-red-500 font-medium">Blocked</span>
-              <% end %>
+              <span class="<%= membership.space_access_status_class %> font-medium">
+                <%= membership.space_access_status %>
+              </span>
             </td>
           <% end %>
         </tr>

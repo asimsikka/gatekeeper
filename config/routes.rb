@@ -2,13 +2,26 @@ Rails.application.routes.draw do
   # Authentication
   devise_for :users
 
-  # Organization management
+
   resources :organizations do
     member do
       get :analytics
       get 'space', to: 'space#show', as: :space
     end
+    resources :memberships do
+      member do
+        get :accept
+      end
+    end
+
+    resources :content_spaces do
+      resources :contents, except: %i[index show]
+    end
   end
+
+  resources :parental_consents, only: %i[new create]
+  get  '/parental_consents/:token/edit',   to: 'parental_consents#edit',   as: :edit_parental_consent
+  patch '/parental_consents/:token',       to: 'parental_consents#update', as: :parental_consent
 
   resource :consents, only: [:create] do
     get 'approve', on: :collection
@@ -17,10 +30,6 @@ Rails.application.routes.draw do
 
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Progressive Web App assets (optional)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Root route
   root "organizations#index"

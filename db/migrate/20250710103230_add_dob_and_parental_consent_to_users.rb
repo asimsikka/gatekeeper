@@ -4,6 +4,7 @@ class AddDobAndParentalConsentToUsers < ActiveRecord::Migration[8.0]
 
     add_column :users, :date_of_birth, :date unless column_exists?(:users, :date_of_birth)
     add_column :users, :first_name, :string  unless column_exists?(:users, :first_name)
+    add_column :users, :last_name, :string  unless column_exists?(:users, :last_name)
     add_column :users, :parental_consent, :boolean, default: false, null: false unless column_exists?(:users, :parental_consent)
   end
 

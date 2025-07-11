@@ -18,7 +18,8 @@ class User < ApplicationRecord
   has_many :parental_consents, dependent: :destroy
   has_many :contents, dependent: :destroy
 
-  validates :date_of_birth, presence: true
+  validates :first_name, :last_name, :date_of_birth, presence: true
+  validates :email, uniqueness: { case_sensitive: false }
   validate :age_must_be_valid
 
   # TODO: evaluate whether this is needed or not :|
