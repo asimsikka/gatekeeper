@@ -1,0 +1,11 @@
+<% if user_signed_in? %>
+  <% Membership.where(status: :invited, invite_email: current_user.email).each do |invite| %>
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+      You’ve been invited to join
+      <strong><%= invite.organization.name %></strong>.
+      <%= link_to 'Accept Invitation',
+                  accept_organization_membership_path(invite.organization, invite),
+                  class: 'underline text-blue-600' %>
+    </div>
+  <% end %>
+<% end %>

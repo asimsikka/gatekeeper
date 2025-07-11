@@ -1,0 +1,12 @@
+<p>Hello <%= @recipient_name %>,</p>
+
+<p>
+  You’ve been invited to join
+  <strong><%= @membership.organization.name %></strong>.
+</p>
+
+<p>
+  <%= link_to "Accept Invitation",
+              accept_organization_membership_url(@membership.organization, @membership),
+              style: "background:#3b82f6;color:white;padding:8px 16px;border-radius:4px;text-decoration:none;" %>
+</p>

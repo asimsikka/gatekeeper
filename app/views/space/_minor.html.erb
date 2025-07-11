@@ -1,0 +1,16 @@
+<% content_for :title, "Minor Space" %>
+
+<div class="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+  <div class="bg-white rounded-xl shadow-md p-8 max-w-xl w-full text-center">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-3xl font-bold text-gray-800">
+        Minor Space
+      </h2>
+      <%= link_to "← Back", organization_path(@organization), class: "text-sm text-gray-600 hover:text-gray-900" %>
+    </div>
+    <p class="text-gray-700 text-lg">
+      Welcome to the minor space in
+      <strong class="text-blue-600"><%= @organization.name %></strong>.
+    </p>
+  </div>
+</div>

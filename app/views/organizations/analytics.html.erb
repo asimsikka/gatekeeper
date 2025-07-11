@@ -1,0 +1,64 @@
+<% content_for :title, "Analytics - #{@organization.name}" %>
+
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-3xl font-bold text-gray-800">
+        Analytics for <span class="text-blue-600"><%= @organization.name %></span>
+      </h2>
+      <%= link_to "← Back", organization_path(@organization), class: "text-sm text-gray-600 hover:text-gray-900" %>
+    </div>
+
+    <div class="mx-auto p-6 bg-white rounded shadow mb-8">
+      <ul class="space-y-2 text-gray-700">
+        <li class="flex items-center justify-between">
+          <span>Content Spaces: <%= @spaces_count %></span>
+          <%= link_to "See all", organization_content_spaces_path(@organization), class: "text-sm text-blue-600 hover:underline" %>
+        </li>
+        <li>
+          Pending Invites: <%= @pending_invites %>
+        </li>
+        <li>
+          Total Content: <%= @content_count %>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+      <div class="p-6 bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div class="flex items-center justify-between mb-1">
+          <h3 class="text-lg font-semibold text-gray-700">
+            Members <%= @memberships.count %>
+          </h3>
+          <%= link_to "See all", organization_memberships_path(@organization),
+                      class: "text-sm text-blue-600 hover:underline font-medium" %>
+        </div>
+        <%= render partial: "member_details", locals: { memberships: @memberships, member: true } %>
+      </div>
+
+      <div class="p-6 bg-white rounded-xl border border-gray-200 shadow-sm">
+        <h3 class="text-lg font-semibold text-gray-700 mb-1">
+          Admins <%= @admin_count %>
+        </h3>
+        <%= render partial: "member_details", locals: { memberships: @admins, member: false } %>
+      </div>
+
+      <div class="p-6 bg-white rounded-xl border border-gray-200 shadow-sm">
+        <h3 class="text-lg font-semibold text-gray-700 mb-3">Recently Joined</h3>
+        <ul class="space-y-2 text-sm text-gray-700">
+          <% @recent_members.each do |membership| %>
+            <li class="flex justify-between items-center border-b border-gray-100 pb-1">
+              <span><%= membership.display_email %></span>
+              <span class="text-gray-500 text-xs"><%= membership.created_at.strftime("%b %d, %Y") %></span>
+            </li>
+          <% end %>
+        </ul>
+        <% if @recent_members.empty? %>
+          <p class="text-gray-400 text-sm italic">No recent members.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,9 +1,105 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+require 'securerandom'
+
+puts "Clearing existing data..."
+[ParentalConsent, Membership, ContentSpace, Organization, User].each(&:destroy_all)
+
+puts "Creating users..."
+alice = User.find_or_create_by!(email: "alice@example.com") do |u|
+  u.first_name            = "Alice"
+  u.last_name             = "Admin"
+  u.date_of_birth         = Date.parse("1980-01-01")
+  u.password              = "password"
+  u.password_confirmation = "password"
+end
+
+bob = User.find_or_create_by!(email: "bob@example.com") do |u|
+  u.first_name            = "Bob"
+  u.last_name             = "Member"
+  u.date_of_birth         = Date.parse("1990-06-15")
+  u.password              = "password"
+  u.password_confirmation = "password"
+end
+
+charlie = User.find_or_create_by!(email: "charlie@example.com") do |u|
+  u.first_name            = "Charlie"
+  u.last_name             = "Teen"
+  u.date_of_birth         = 15.years.ago.to_date
+  u.password              = "password"
+  u.password_confirmation = "password"
+end
+
+dana = User.find_or_create_by!(email: "dana@example.com") do |u|
+  u.first_name            = "Dana"
+  u.last_name             = "Child"
+  u.date_of_birth         = 10.years.ago.to_date
+  u.password              = "password"
+  u.password_confirmation = "password"
+end
+
+puts "Seeding parental consent for Dana (minor)..."
+# Pending consent
+ParentalConsent.find_or_create_by!(user: dana, guardian_email: "parent_pending@example.com") do |c|
+  # leave approved: false, sent_at auto-set
+end
+# Already approved consent
+ParentalConsent.find_or_create_by!(
+  user:           dana,
+  guardian_email: "parent_approved@example.com"
+) do |c|
+  c.approve!   # flips both c.approved and dana.parental_consent
+end
+
+puts "Creating organizations..."
+org1 = Organization.find_or_create_by!(name: "Org One") do |o|
+  o.email_domain = "orgone.com"
+end
+
+org2 = Organization.find_or_create_by!(name: "Org Two") do |o|
+  o.email_domain = "orgtwo.com"
+end
+
+puts "Creating active memberships..."
+# Org1: Alice=admin, Bob&Charlie=member
+Membership.find_or_create_by!(organization: org1, user: alice) do |m|
+  m.role   = "admin"
+  m.status = "active"
+end
+Membership.find_or_create_by!(organization: org1, user: bob) do |m|
+  m.role   = "member"
+  m.status = "active"
+end
+Membership.find_or_create_by!(organization: org1, user: charlie) do |m|
+  m.role   = "member"
+  m.status = "active"
+end
+
+# Org2: Bob=admin, Charlie=manager
+Membership.find_or_create_by!(organization: org2, user: bob) do |m|
+  m.role   = "admin"
+  m.status = "active"
+end
+Membership.find_or_create_by!(organization: org2, user: charlie) do |m|
+  m.role   = "manager"
+  m.status = "active"
+end
+
+puts "Seeding a pending invite (Org1 → Dana)..."
+Membership.find_or_create_by!(organization: org1, invite_email: dana.email) do |m|
+  m.role               = "member"
+  m.status             = "invited"
+  m.invitation_token   = SecureRandom.urlsafe_base64(24)
+  m.invitation_sent_at = Time.current
+end
+
+puts "Creating content spaces..."
+ContentSpace.find_or_create_by!(organization: org1, name: "Teen Zone")  do |s|
+  s.min_age = 13; s.max_age = 17
+end
+ContentSpace.find_or_create_by!(organization: org1, name: "Adult Zone") do |s|
+  s.min_age = 18; s.max_age = 99
+end
+ContentSpace.find_or_create_by!(organization: org2, name: "All Ages")   do |s|
+  s.min_age = 0;  s.max_age = 99
+end
+
+puts "Seeding complete! 🚀"

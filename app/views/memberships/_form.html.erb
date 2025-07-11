@@ -1,0 +1,34 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">
+      <%= local_assigns[:form_title] || "Membership Form" %>
+    </h2>
+
+    <%= form_with model: [@organization, @membership], local: true, html: { class: "space-y-6" } do |f| %>
+      <div>
+        <%= f.label :invite_email, "Invitee Email", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.email_field :invite_email,
+              placeholder: "user@example.com",
+              class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+
+      <div>
+        <%= f.label :role, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.select :role,
+              Membership.roles.keys,
+              {},
+              class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+
+      <div>
+        <%= f.submit (local_assigns[:submit_label] || "Save"),
+              class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      </div>
+    <% end %>
+
+    <div class="mt-4 text-center">
+      <%= link_to "← Back to Members", organization_memberships_path(@organization),
+                  class: "text-sm text-gray-600 hover:text-blue-600" %>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,32 @@
 @import "tailwindcss";
+
+/* TODO: move these to components when cleaning up & import here */
+@layer components {
+  .btn {
+    @apply inline-flex items-center px-4 py-2 rounded text-sm font-medium transition;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center px-4 py-2 rounded text-sm font-medium transition bg-blue-400 text-white hover:bg-blue-700;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center px-4 py-2 rounded text-sm font-medium transition bg-gray-300 text-black hover:bg-gray-400;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center px-4 py-2 rounded text-sm font-medium transition bg-red-400 text-white hover:bg-red-700;
+  }
+
+  .btn-link {
+    @apply inline-flex items-center px-4 py-2 rounded text-sm font-medium transition underline text-blue-400 hover:text-blue-600;
+  }
+
+  .form-input {
+    @apply block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:opacity-50;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+}

@@ -1,0 +1,33 @@
+<div class="overflow-x-auto">
+  <table class="min-w-full text-sm divide-y divide-gray-200">
+    <thead class="bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      <tr>
+        <th class="px-4 py-3">Email</th>
+        <th class="px-4 py-3">Age Group</th>
+        <% if member %>
+          <th class="px-4 py-3">Consent Required</th>
+          <th class="px-4 py-3">Space Access</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-100 text-gray-700">
+      <% memberships.includes(:user).each do |membership| %>
+        <tr>
+          <td class="px-4 py-2"><%= membership.display_email %></td>
+          <td class="px-4 py-2 capitalize"><%= membership.display_age_group %></td>
+
+          <% if member %>
+            <td class="px-4 py-2">
+              <%= membership.consent_required?.nil? ? "Unknown" : (membership.consent_required? ? "Yes" : "No") %>
+            </td>
+            <td class="px-4 py-2">
+              <span class="<%= membership.space_access_status_class %> font-medium">
+                <%= membership.space_access_status %>
+              </span>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
