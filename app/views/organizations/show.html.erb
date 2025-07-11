@@ -7,18 +7,15 @@
         <%= notice %>
       </div>
     <% end %>
-     <div class="flex items-center justify-between mb-8">
-      <h2 class="text-3xl font-bold text-gray-800">
-        Organization details
-      </h2>
-      <%= link_to "← Back", organizations_path, class: "text-sm text-gray-600 hover:text-gray-900" %>
-    </div>
+      <%= render partial: "shared/heading_back", locals: {
+            title: "Organization details",
+            back_label: "Back",
+            back_path: organizations_path } %>
 
     <div class="bg-white shadow-md rounded-xl p-6">
       <%= render @organization %>
     </div>
 
-    <!-- Action Buttons -->
     <div class="flex flex-wrap gap-3">
       <% if admin_for?(@organization) %>
         <%= link_to "Edit", edit_organization_path(@organization), class: "inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-md shadow hover:bg-blue-700 transition" %>

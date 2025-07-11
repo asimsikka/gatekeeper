@@ -10,12 +10,20 @@
     </div>
 
     <div class="mx-auto p-6 bg-white rounded shadow mb-8">
-      <ul class="space-y-2">
-        <li>Pending Invites: <%= @pending_invites %></li>
-        <li>Content Spaces: <%= @spaces_count %></li>
-        <li>Total Content: <%= @content_count %></li>
+      <ul class="space-y-2 text-gray-700">
+        <li class="flex items-center justify-between">
+          <span>Content Spaces: <%= @spaces_count %></span>
+          <%= link_to "See all", organization_content_spaces_path(@organization), class: "text-sm text-blue-600 hover:underline" %>
+        </li>
+        <li>
+          Pending Invites: <%= @pending_invites %>
+        </li>
+        <li>
+          Total Content: <%= @content_count %>
+        </li>
       </ul>
     </div>
+
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
