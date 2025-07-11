@@ -1,0 +1,16 @@
+<p>Hello,</p>
+
+<p>
+  Your <strong><%= @user.first_name %> <%= @user.last_name %></strong>
+  (age <%= @user.age %>) has just registered and requires your consent to join.
+</p>
+
+<p>
+  Please click the button below to approve:
+</p>
+
+<p>
+  <%= link_to 'Approve Consent',
+      edit_parental_consent_url(token: @consent.token),
+      style: 'background:#3b82f6;color:white;padding:8px 16px;border-radius:4px;text-decoration:none;' %>
+</p>

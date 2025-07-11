@@ -6,6 +6,7 @@ class CreateParentalConsents < ActiveRecord::Migration[8.0]
       t.string :token, null: false
       t.boolean :approved, null: false, default: false
       t.datetime :approved_at
+      t.datetime :sent_at, null: false
 
       t.timestamps
     end

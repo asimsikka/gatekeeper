@@ -1,7 +1,7 @@
 class ParentalConsent < ApplicationRecord
   belongs_to :user
 
-  before_validation :generate_token, on: :create
+  before_validation :generate_token_and_timestamp, on: :create
 
   validates :guardian_email,
             presence: true,
@@ -14,7 +14,8 @@ class ParentalConsent < ApplicationRecord
 
   private
 
-  def generate_token
-    self.token ||= SecureRandom.urlsafe_base64(24)
+  def generate_token_and_timestamp
+    self.token   = SecureRandom.urlsafe_base64(24)
+    self.sent_at = Time.current
   end
 end

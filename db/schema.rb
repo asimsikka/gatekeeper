@@ -72,6 +72,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_070112) do
     t.string "token", null: false
     t.boolean "approved", default: false, null: false
     t.datetime "approved_at"
+    t.datetime "sent_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_parental_consents_on_token", unique: true
