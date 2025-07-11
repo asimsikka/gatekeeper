@@ -1,0 +1,66 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Sign up</h2>
+
+    <%= form_for(resource, as: resource_name,
+                 url: registration_path(resource_name),
+                 html: { class: "space-y-6" }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div>
+        <%= f.label :first_name, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :first_name,
+                         autofocus: true,
+                         class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+
+      <div>
+        <%= f.label :last_name, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :last_name,
+                         class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+
+      <div>
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.email_field :email,
+                          autocomplete: "email",
+                          class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+
+      <div>
+        <%= f.label :date_of_birth, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.date_select :date_of_birth,
+                          start_year: Date.today.year - 100,
+                          end_year: Date.today.year,
+                          use_native: true,
+                          class: "mt-1 block w-full text-sm" %>
+      </div>
+
+      <div>
+        <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
+        <% if @minimum_password_length %>
+          <em class="text-sm text-gray-500">(<%= @minimum_password_length %> characters minimum)</em>
+        <% end %>
+        <%= f.password_field :password,
+                             autocomplete: "new-password",
+                             class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+
+      <div>
+        <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.password_field :password_confirmation,
+                             autocomplete: "new-password",
+                             class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+
+      <div>
+        <%= f.submit "Sign up",
+                     class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      </div>
+    <% end %>
+
+    <div class="mt-4 text-center text-sm text-gray-600 space-y-2">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>

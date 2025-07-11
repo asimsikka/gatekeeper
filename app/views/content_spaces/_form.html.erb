@@ -1,0 +1,34 @@
+<%= form_with model: [@organization, @content_space], local: true do |f| %>
+  <div class="mb-4">
+    <%= f.label :name, "Space Name", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :name,
+        class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+    <% if f.object.errors[:name].any? %>
+      <p class="text-sm text-red-500 mt-1"><%= f.object.errors.full_messages_for(:name).join(", ") %></p>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <div>
+      <%= f.label :min_age, "Minimum Age", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :min_age,
+          class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+      <% if f.object.errors[:min_age].any? %>
+        <p class="text-sm text-red-500 mt-1"><%= f.object.errors.full_messages_for(:min_age).join(", ") %></p>
+      <% end %>
+    </div>
+    <div>
+      <%= f.label :max_age, "Maximum Age", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :max_age,
+          class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" %>
+      <% if f.object.errors[:max_age].any? %>
+        <p class="text-sm text-red-500 mt-1"><%= f.object.errors.full_messages_for(:max_age).join(", ") %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <%= f.submit f.object.persisted? ? "Update Space" : "Create Space",
+        class: "w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow transition" %>
+  </div>
+<% end %>

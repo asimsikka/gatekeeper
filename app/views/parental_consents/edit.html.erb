@@ -1,0 +1,22 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Approve Consent</h1>
+
+    <p class="text-gray-700 mb-6 text-center">
+      You are approving consent for
+      <strong><%= @consent.user.first_name %> <%= @consent.user.last_name %></strong>
+      (age <%= @consent.user.age %>).
+    </p>
+
+    <%= form_with url: parental_consent_path(token: @consent.token), method: :patch, local: true, html: { class: "space-y-6" } do |f| %>
+      <div>
+        <%= f.submit "Approve Consent",
+              class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
+      </div>
+    <% end %>
+
+    <div class="mt-4 text-center">
+      <%= link_to "← Back to Home", root_path, class: "text-sm text-gray-600 hover:text-blue-600" %>
+    </div>
+  </div>
+</div>

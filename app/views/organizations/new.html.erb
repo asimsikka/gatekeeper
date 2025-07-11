@@ -1,0 +1,15 @@
+<% content_for :title, "New Organization" %>
+
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-xl mx-auto space-y-6">
+
+    <div class="flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-gray-800">New Organization</h1>
+      <%= link_to "← Back", organizations_path, class: "text-sm text-gray-600 hover:text-gray-900" %>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <%= render "form", organization: @organization, submit_label: "Create Organization" %>
+    </div>
+  </div>
+</div>

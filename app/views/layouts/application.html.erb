@@ -20,9 +20,17 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <script src="https://unpkg.com/flowbite@2.3.0/dist/flowbite.min.js"></script>
   </head>
 
   <body>
+    <%= render "shared/navbar" %>
+     <% if notice %>
+      <div class="mb-6 text-green-700 font-medium bg-green-100 border border-green-300 rounded-lg px-4 py-3 shadow">
+        <%= notice %>
+      </div>
+    <% end %>
+    <%= render 'layouts/invite_notification' %>
     <%= yield %>
   </body>
 </html>
