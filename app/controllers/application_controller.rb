@@ -25,6 +25,8 @@ class ApplicationController < ActionController::Base
 
     if controller_name == 'parental_consents' && %w[new create edit update].include?(action_name)
       return
+    elsif devise_controller? && action_name == 'destroy'
+      return
     end
 
     redirect_to new_parental_consent_path(user_id: current_user.id),
