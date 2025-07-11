@@ -15,6 +15,9 @@ class User < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :organizations, through: :memberships
 
+  has_many :parental_consents, dependent: :destroy
+  has_many :contents, dependent: :destroy
+
   validates :date_of_birth, presence: true
   validate :age_must_be_valid
 
