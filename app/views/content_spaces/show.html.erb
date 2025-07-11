@@ -11,13 +11,6 @@
         <p class="text-sm text-gray-600">
           Age range: <strong><%= @content_space.min_age %>–<%= @content_space.max_age %></strong>
         </p>
-
-        <% new_content = @content_space.contents.build %>
-        <% if policy(new_content).create? %>
-          <%= link_to "Add Content",
-                      new_organization_content_space_content_path(@organization, @content_space),
-                      class: "inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded transition" %>
-        <% end %>
       </div>
     </div>
 

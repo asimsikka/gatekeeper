@@ -4,7 +4,13 @@ class ContentSpacesController < ApplicationController
   before_action :set_content_space, only: %i[show edit update destroy]
 
   def index
-    @content_spaces = policy_scope(@organization.content_spaces)
+    spaces = policy_scope(@organization.content_spaces)
+
+    if policy(@organization).update?
+      @content_spaces = spaces
+    else
+      @content_spaces = spaces.for_age(current_user.age)
+    end
   end
 
   def show

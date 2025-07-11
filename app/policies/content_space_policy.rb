@@ -1,5 +1,4 @@
 class ContentSpacePolicy < ApplicationPolicy
- 
   def show?
     OrganizationPolicy.new(user, record.organization).show?
   end

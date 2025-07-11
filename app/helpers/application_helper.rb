@@ -7,6 +7,10 @@ module ApplicationHelper
     current_user.memberships.find_by(organization: org)&.member?
   end
 
+  def manager_for?(org)
+    current_user.memberships.find_by(organization: org)&.manager?
+  end
+
   def membership_access_status(user)
     return "Pending Invite" unless user.present?
 
