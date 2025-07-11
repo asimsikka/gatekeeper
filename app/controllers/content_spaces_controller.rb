@@ -5,7 +5,6 @@ class ContentSpacesController < ApplicationController
 
   def index
     @content_spaces = policy_scope(@organization.content_spaces)
-    authorize @content_spaces
   end
 
   def show

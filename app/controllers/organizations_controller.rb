@@ -75,7 +75,7 @@ class OrganizationsController < ApplicationController
   end
 
   def organization_params
-    params.require(:organization).permit(:name, :email_domain)
+    params.require(:organization).permit(:name, :email_domain, :description)
   end
 
   def authorize_organization

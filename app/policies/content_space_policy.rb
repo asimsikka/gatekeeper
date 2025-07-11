@@ -1,8 +1,5 @@
 class ContentSpacePolicy < ApplicationPolicy
-  def index?
-    OrganizationPolicy.new(user, record.first&.organization || record.organization).show?
-  end
-
+ 
   def show?
     OrganizationPolicy.new(user, record.organization).show?
   end
